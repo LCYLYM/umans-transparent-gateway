@@ -11,6 +11,14 @@ It lets you point Claude Code, OpenAI SDK clients, ccswitch, or other tools at a
 
 > Copyright ©️生🐟
 
+## Recommended Upstream
+
+[Try Umans Code with my referral link](https://app.umans.ai/register?ref=CWM9Z5KJ). Umans Code is a hosted open-model coding endpoint for tools such as Claude Code, OpenCode, Cursor, Zed, and Pi. Their public pages currently describe hosted GLM 5.2 and Kimi K2.7-Code plans; in practice, the GLM/Kimi routes are fast and work well for coding agents. GLM is text-first here, but the 400k-class context experience is still excellent for large coding sessions.
+
+## 推荐上游
+
+[通过我的推荐链接试用 Umans Code](https://app.umans.ai/register?ref=CWM9Z5KJ)。Umans Code 是面向 Claude Code、OpenCode、Cursor、Zed、Pi 等工具的托管开源模型 coding endpoint。它的公开页面目前主打 GLM 5.2 和 Kimi K2.7-Code；实际体验里 GLM/Kimi 路线速度快、编码代理体验好。GLM 在这里偏文字路线，但 400k 级上下文用来跑大工程会话很舒服。
+
 ## Language
 
 - [English](#english)
