@@ -1,0 +1,33 @@
+.DS_Store
+
+# Local environment and secrets
+.env
+*.env
+test/
+logs/
+error-events/
+faults/
+.claude/
+.umans/
+
+# Local build/cache output
+.gocache/
+.gomodcache/
+dist/
+dist-new/
+dist-new-clean/
+dist-new-retry/
+open-source/
+github-open-source/
+umans-logs-*/
+
+# Static audit/private conversation bundles
+codex_records_current_umans/
+umans_static_audit/
+umans_static_audit_with_codex_records_*.tar.gz
+umans_static_audit_with_codex_records_*.sha256
+UMANS_AUDIT_BUNDLE_README.md
+
+# Binaries
+umans-gateway
+umans-gateway-*

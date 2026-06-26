@@ -1,0 +1,22 @@
+[Unit]
+Description=Umans Transparent Gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=umans-gateway
+Group=umans-gateway
+EnvironmentFile=-/etc/umans-gateway/env
+ExecStart=/usr/local/bin/umans-gateway
+Restart=on-failure
+RestartSec=3
+WorkingDirectory=/var/lib/umans-gateway
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/umans-gateway
+
+[Install]
+WantedBy=multi-user.target
