@@ -144,7 +144,7 @@ func (s *Service) proxyJSON(w http.ResponseWriter, r *http.Request, opts proxyOp
 		return
 	}
 	defer r.Body.Close()
-	body = normalizeModelInJSON(body)
+	body = normalizeRequestJSON(body)
 
 	modified, budgetNote, err := s.applyBudgetPolicy(r.Context(), auth.Key, body, opts.BudgetField, opts.AltBudgetField)
 	if err != nil {
@@ -468,10 +468,8 @@ func (s *Service) runWSRequest(ctx context.Context, c *websocket.Conn, req wsReq
 
 	body := append([]byte(nil), req.Body...)
 	var payload map[string]any
+	body = normalizeRequestJSON(body)
 	_ = json.Unmarshal(body, &payload)
-	if model, ok := payload["model"].(string); ok {
-		payload["model"] = normalizeModelName(model)
-	}
 	payload["stream"] = true
 	body, _ = json.Marshal(payload)
 
