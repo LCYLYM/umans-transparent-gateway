@@ -61,7 +61,7 @@ func DefaultConfig() Config {
 		UpstreamRetryCap:  5 * time.Second,
 		SchemaCompat:      true,
 		CatalogTTL:        10 * time.Minute,
-		SearchMode:        SearchAuto,
+		SearchMode:        SearchExa,
 		BudgetPolicy:      BudgetError,
 		ErrorEventDir:     "error-events",
 		ErrorEventMaxAge:  24 * time.Hour,

@@ -93,6 +93,49 @@ func TestChatProxySearchHeaderOverrideAndOpenAIAuth(t *testing.T) {
 	}
 }
 
+func TestMessagesDefaultSearchHeaderUsesExa(t *testing.T) {
+	svc, _ := newTestService(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("X-Umans-Websearch-Provider") != "exa" {
+			t.Fatalf("websearch=%q", r.Header.Get("X-Umans-Websearch-Provider"))
+		}
+		_, _ = w.Write([]byte(`{"id":"msg_1","content":[{"type":"text","text":"ok"}]}`))
+	})
+	req := httptest.NewRequest(http.MethodPost, "/v1/messages", strings.NewReader(`{"model":"umans-glm-5.2","messages":[{"role":"user","content":"hi"}]}`))
+	req.Header.Set("x-api-key", "sk-test")
+	rr := httptest.NewRecorder()
+	svc.Routes().ServeHTTP(rr, req)
+	if rr.Code != 200 {
+		t.Fatalf("code=%d body=%s", rr.Code, rr.Body.String())
+	}
+}
+
+func TestClaudeEnvIncludesDefaultWebsearchHeader(t *testing.T) {
+	svc, _ := newTestService(t, func(w http.ResponseWriter, r *http.Request) {})
+	req := httptest.NewRequest(http.MethodGet, "/client/claude-env", nil)
+	rr := httptest.NewRecorder()
+	svc.Routes().ServeHTTP(rr, req)
+	if rr.Code != 200 {
+		t.Fatalf("code=%d body=%s", rr.Code, rr.Body.String())
+	}
+	if !strings.Contains(rr.Body.String(), "ANTHROPIC_CUSTOM_HEADERS=X-Umans-Websearch-Provider: exa\n") {
+		t.Fatalf("missing websearch custom header: %s", rr.Body.String())
+	}
+}
+
+func TestClaudeEnvOmitsWebsearchHeaderInAutoMode(t *testing.T) {
+	svc, _ := newTestService(t, func(w http.ResponseWriter, r *http.Request) {})
+	svc.cfg.SearchMode = SearchAuto
+	req := httptest.NewRequest(http.MethodGet, "/client/claude-env", nil)
+	rr := httptest.NewRecorder()
+	svc.Routes().ServeHTTP(rr, req)
+	if rr.Code != 200 {
+		t.Fatalf("code=%d body=%s", rr.Code, rr.Body.String())
+	}
+	if strings.Contains(rr.Body.String(), "ANTHROPIC_CUSTOM_HEADERS=") {
+		t.Fatalf("unexpected custom header: %s", rr.Body.String())
+	}
+}
+
 func TestBudgetRejectsOverSafeMax(t *testing.T) {
 	svc, _ := newTestService(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/v1/models/info" {

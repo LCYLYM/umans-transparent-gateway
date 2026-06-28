@@ -78,6 +78,9 @@ func (s *Service) handleClaudeEnv(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1")
 	fmt.Fprintln(w, "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING=1")
 	fmt.Fprintln(w, "ENABLE_TOOL_SEARCH=false")
+	if provider := s.forcedSearchProvider(); provider != "" {
+		fmt.Fprintf(w, "ANTHROPIC_CUSTOM_HEADERS=%s: %s\n", searchProviderHeader, provider)
+	}
 	fmt.Fprintln(w, "CLAUDE_CODE_ATTRIBUTION_HEADER=0")
 }
 
@@ -233,21 +236,30 @@ func (s *Service) applyBudgetPolicy(ctx context.Context, key string, body []byte
 	return nil, fmt.Sprintf("reject:%s=%d>%d", usedField, requested, maxOutput), fmt.Errorf("%s %d exceeds safe catalog output cap %d", usedField, requested, maxOutput)
 }
 
-func (s *Service) applySearchHeader(dst http.Header, inbound http.Header) {
-	const name = "X-Umans-Websearch-Provider"
+const searchProviderHeader = "X-Umans-Websearch-Provider"
+
+func (s *Service) forcedSearchProvider() string {
 	switch s.cfg.SearchMode {
 	case SearchNative:
-		dst.Set(name, "native")
+		return "native"
 	case SearchExa:
-		dst.Set(name, "exa")
+		return "exa"
 	case SearchNone:
-		dst.Set(name, "none")
-	case SearchAuto:
-		if v := inbound.Get(name); v != "" {
-			dst.Set(name, v)
-		} else {
-			dst.Del(name)
-		}
+		return "none"
+	default:
+		return ""
+	}
+}
+
+func (s *Service) applySearchHeader(dst http.Header, inbound http.Header) {
+	if provider := s.forcedSearchProvider(); provider != "" {
+		dst.Set(searchProviderHeader, provider)
+		return
+	}
+	if v := inbound.Get(searchProviderHeader); v != "" {
+		dst.Set(searchProviderHeader, v)
+	} else {
+		dst.Del(searchProviderHeader)
 	}
 }
 

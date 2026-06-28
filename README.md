@@ -104,7 +104,7 @@ curl http://127.0.0.1:8080/v1/chat/completions \
 | --- | --- | --- |
 | `UMANS_GATEWAY_LISTEN` | `0.0.0.0:8080` | HTTP listen address |
 | `UMANS_UPSTREAM_BASE_URL` | `https://api.code.umans.ai` | Upstream Umans-compatible API base URL |
-| `UMANS_SEARCH_MODE` | `auto` | `auto`, `native`, `exa`, or `none` |
+| `UMANS_SEARCH_MODE` | `exa` | `exa`, `native`, `auto`, or `none`; forced modes inject `X-Umans-Websearch-Provider` upstream |
 | `UMANS_BUDGET_POLICY` | `error` | `error` or `clamp-visible` for output token budget handling |
 | `UMANS_KEY_CONCURRENCY_LIMIT` | `4` | Active request limit per API key |
 | `UMANS_KEY_QUEUE_TIMEOUT` | `10m` | Max time a request waits for a per-key slot |
@@ -255,7 +255,7 @@ curl http://127.0.0.1:8080/v1/chat/completions \
 | --- | --- | --- |
 | `UMANS_GATEWAY_LISTEN` | `0.0.0.0:8080` | HTTP 监听地址 |
 | `UMANS_UPSTREAM_BASE_URL` | `https://api.code.umans.ai` | Umans-compatible 上游 API base URL |
-| `UMANS_SEARCH_MODE` | `auto` | `auto`、`native`、`exa` 或 `none` |
+| `UMANS_SEARCH_MODE` | `exa` | `exa`、`native`、`auto` 或 `none`；强制模式会向上游注入 `X-Umans-Websearch-Provider` |
 | `UMANS_BUDGET_POLICY` | `error` | 输出 token 预算策略：`error` 或 `clamp-visible` |
 | `UMANS_KEY_CONCURRENCY_LIMIT` | `4` | 每个 API key 的同时活跃请求上限 |
 | `UMANS_KEY_QUEUE_TIMEOUT` | `10m` | 同 key 请求排队等待上限 |

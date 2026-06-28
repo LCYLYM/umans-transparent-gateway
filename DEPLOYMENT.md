@@ -98,7 +98,7 @@ curl http://127.0.0.1:8080/healthz
 ```text
 UMANS_GATEWAY_LISTEN=0.0.0.0:8080
 UMANS_UPSTREAM_BASE_URL=https://api.code.umans.ai
-UMANS_SEARCH_MODE=auto          # auto | native | exa | none
+UMANS_SEARCH_MODE=exa           # exa | native | auto | none
 UMANS_BUDGET_POLICY=error       # error | clamp-visible
 UMANS_KEY_CONCURRENCY_LIMIT=4
 UMANS_KEY_QUEUE_TIMEOUT=10m
